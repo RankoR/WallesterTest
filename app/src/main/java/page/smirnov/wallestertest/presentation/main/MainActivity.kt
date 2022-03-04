@@ -65,7 +65,7 @@ class MainActivity : AppCompatActivity() {
         Log.d("WTEST", "New tab: $tab")
 
         // For now, the navigation is pretty ugly as we use no libs
-        // Usually it should be something like Cicerone that handles it nicely
+        // Normally it should be implemented with something like Cicerone that handles it nicely
         // There is no backstack between tabs
         // But implementing «good» and correct navigation looks like a pretty large test task itself
         // So, I use a very simple solution:
