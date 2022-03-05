@@ -1,7 +1,8 @@
-package page.smirnov.wallester.core_network
+package page.smirnov.wallester.core_network.request
 
 import org.junit.Assert
 import org.junit.Test
+import page.smirnov.wallester.core_network.assertThrows
 import page.smirnov.wallester.core_network.domain.BuildUrl
 import page.smirnov.wallester.core_network.domain.BuildUrlImpl
 import java.net.MalformedURLException
@@ -33,15 +34,8 @@ class BuildUrlTest {
 
     @Test
     fun buildWithInvalidBaseUrl() {
-        // Unfortunately, assertThrows is not available on Android
-        try {
+        assertThrows<MalformedURLException> {
             buildUrl.exec("this is an invalid value")
-
-            Assert.fail("Expected MalformedURLException")
-        } catch (e: Throwable) {
-            if (e !is MalformedURLException) {
-                Assert.fail("Expected MalformedURLException but got other exception: $e")
-            }
         }
     }
 }
