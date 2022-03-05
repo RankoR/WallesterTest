@@ -5,6 +5,9 @@ import page.smirnov.wallester.core_network.data.model.Beer
 import page.smirnov.wallester.core_network.data.parser.base.ResponseParser
 import page.smirnov.wallester.core_network.util.toJSONObjectSequence
 
+/**
+ * Should be in a separate feature module like «:beers», but it's too complicated for a test project
+ */
 interface BeerListParser : ResponseParser<List<Beer>>
 
 class BeerListParserImpl(

@@ -6,6 +6,7 @@ import page.smirnov.wallester.core_network.data.parser.base.JsonObjectParser
 
 /**
  * Normally I'd use KotlinX serialization, but we can't use libs
+ * Should be in a separate feature module like «:beers», but it's too complicated for a test project
  */
 interface BeerParser : JsonObjectParser<Beer>
 
