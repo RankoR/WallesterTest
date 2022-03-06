@@ -9,6 +9,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
 import page.smirnov.wallester.core.util.extension.onFailureLog
+import page.smirnov.wallester.core.util.extension.onFinish
 import page.smirnov.wallester.core_network.data.model.Beer
 import page.smirnov.wallester.core_network.data.parser.beer.BeerListParserImpl
 import page.smirnov.wallester.core_network.domain.BuildUrlImpl
@@ -42,12 +43,17 @@ class ListViewModel : BaseViewModel() {
 
     private var currentPage = 0 // Normally we should use a pagination library, but it's an overkill for such project
 
+    private var isLoading = false
+
     init {
         loadNextPage()
     }
 
     private fun loadNextPage() {
+        isLoading = true
         currentPage++
+
+        Log.i("WTEST", "Loading page: $currentPage")
 
         viewModelScope.launch {
             getBeerList
@@ -55,9 +61,12 @@ class ListViewModel : BaseViewModel() {
                 .onFailureLog()
                 .onFailure(::showErrorMessage)
                 .onSuccess { beersOnPage ->
+                    Log.i("WTEST", "Loaded ${beersOnPage.size} beers")
+
                     beers = beers + beersOnPage
                     _beerList.emit(beers)
                 }
+                .onFinish { isLoading = false }
         }
     }
 
@@ -66,6 +75,21 @@ class ListViewModel : BaseViewModel() {
 
         viewModelScope.launch {
             _openBeerScreen.emit(beer)
+        }
+    }
+
+    /**
+     * Very naive impl of pagination
+     */
+    internal fun onScrollPositionChanged(position: Int) {
+        if (position == beers.size - 1) {
+            Log.i("WTEST", "Scrolled to last position: $position")
+
+            if (!isLoading) {
+                Log.i("WTEST", "Load next page")
+
+                loadNextPage()
+            }
         }
     }
 }

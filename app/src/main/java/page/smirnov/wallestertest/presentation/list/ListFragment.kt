@@ -1,13 +1,12 @@
 package page.smirnov.wallestertest.presentation.list
 
-import android.os.Bundle
 import android.util.Log
-import android.view.View
 import androidx.fragment.app.commit
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.RecyclerView.OnScrollListener
 import kotlinx.coroutines.launch
 import page.smirnov.wallester.core_network.data.model.Beer
 import page.smirnov.wallester.core_ui.presentation.BaseFragment
@@ -33,15 +32,20 @@ class ListFragment : BaseFragment<FragmentListBinding>(FragmentListBinding::infl
         beersAdapter.onItemClick = viewModel::onBeerClick
 
         binding?.beersRv?.apply {
-            layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
+            val linearLayoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
+            layoutManager = linearLayoutManager
             adapter = beersAdapter
+
+            addOnScrollListener(object : OnScrollListener() {
+                override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                    super.onScrolled(recyclerView, dx, dy)
+
+                    val position = linearLayoutManager.findLastCompletelyVisibleItemPosition()
+
+                    viewModel.onScrollPositionChanged(position)
+                }
+            })
         }
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        Log.i("WTEST", "onViewCreated")
-
-        super.onViewCreated(view, savedInstanceState)
     }
 
     override fun onStart() {
