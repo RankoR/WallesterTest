@@ -16,6 +16,16 @@ import page.smirnov.wallester.core_network.domain.BuildUrlImpl
 import page.smirnov.wallester.core_network.domain.MakeGetRequestImpl
 import page.smirnov.wallester.core_network.domain.beer.GetBeerList
 import page.smirnov.wallester.core_network.domain.beer.GetBeerListImpl
+import page.smirnov.wallester.core_persistence.data.model.FavoriteBeer
+import page.smirnov.wallester.core_persistence.data.repository.FavoritesRepositoryHolder
+import page.smirnov.wallester.core_persistence.domain.interactor.AddFavorite
+import page.smirnov.wallester.core_persistence.domain.interactor.AddFavoriteImpl
+import page.smirnov.wallester.core_persistence.domain.interactor.GetFavorites
+import page.smirnov.wallester.core_persistence.domain.interactor.GetFavoritesImpl
+import page.smirnov.wallester.core_persistence.domain.interactor.ListenFavoritesChanges
+import page.smirnov.wallester.core_persistence.domain.interactor.ListenFavoritesChangesImpl
+import page.smirnov.wallester.core_persistence.domain.interactor.RemoveFavorite
+import page.smirnov.wallester.core_persistence.domain.interactor.RemoveFavoriteImpl
 import page.smirnov.wallester.core_ui.presentation.BaseViewModel
 
 class ListViewModel : BaseViewModel() {
@@ -33,6 +43,26 @@ class ListViewModel : BaseViewModel() {
         beerListParser = BeerListParserImpl()
     )
 
+    // DI
+    private val listenFavoritesChanges: ListenFavoritesChanges = ListenFavoritesChangesImpl(
+        favoritesRepository = FavoritesRepositoryHolder.favoritesRepository
+    )
+
+    // DI
+    private val getFavorites: GetFavorites = GetFavoritesImpl(
+        favoritesRepository = FavoritesRepositoryHolder.favoritesRepository
+    )
+
+    // DI
+    private val addFavorite: AddFavorite = AddFavoriteImpl(
+        favoritesRepository = FavoritesRepositoryHolder.favoritesRepository
+    )
+
+    // DI
+    private val removeFavorite: RemoveFavorite = RemoveFavoriteImpl(
+        favoritesRepository = FavoritesRepositoryHolder.favoritesRepository
+    )
+
     private val _beerList = MutableStateFlow<List<Beer>>(emptyList())
     val beerList: Flow<List<Beer>> = _beerList
 
@@ -47,6 +77,17 @@ class ListViewModel : BaseViewModel() {
 
     init {
         loadNextPage()
+        listenForFavoriteChanges()
+    }
+
+    private fun listenForFavoriteChanges() {
+        viewModelScope.launch {
+            listenFavoritesChanges.exec().collect {
+                Log.i("WTEST", "List: Favorites updated")
+
+                updateFavoritesState()
+            }
+        }
     }
 
     private fun loadNextPage() {
@@ -64,9 +105,32 @@ class ListViewModel : BaseViewModel() {
                     Log.i("WTEST", "Loaded ${beersOnPage.size} beers")
 
                     beers = beers + beersOnPage
-                    _beerList.emit(beers)
+
+                    // Future improvement: update only for new items
+                    updateFavoritesState()
                 }
                 .onFinish { isLoading = false }
+        }
+    }
+
+    private fun updateFavoritesState() {
+        viewModelScope.launch {
+            getFavorites
+                .exec()
+                .onFailureLog()
+                .onSuccess { favorites ->
+                    beers = beers.map { beer ->
+                        val isFavorite = favorites.find { it.id == beer.id } != null
+
+                        if (beer.isFavorite != isFavorite) {
+                            beer.copy(isFavorite = isFavorite)
+                        } else {
+                            beer
+                        }
+                    }
+
+                    _beerList.emit(beers)
+                }
         }
     }
 
@@ -75,6 +139,16 @@ class ListViewModel : BaseViewModel() {
 
         viewModelScope.launch {
             _openBeerScreen.emit(beer)
+        }
+    }
+
+    internal fun toggleFavorite(beer: Beer) {
+        viewModelScope.launch {
+            if (beer.isFavorite) {
+                removeFavorite.exec(FavoriteBeer(id = beer.id))
+            } else {
+                addFavorite.exec(FavoriteBeer(id = beer.id))
+            }
         }
     }
 

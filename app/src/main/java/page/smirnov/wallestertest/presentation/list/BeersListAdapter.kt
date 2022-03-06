@@ -6,11 +6,13 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import page.smirnov.wallester.core_network.data.model.Beer
 import page.smirnov.wallester.core_ui.util.setOnSingleClickListener
+import page.smirnov.wallestertest.R
 import page.smirnov.wallestertest.databinding.ViewItemBeerListBinding
 
 class BeersListAdapter : RecyclerView.Adapter<BeersListAdapter.ViewHolder>() {
 
     var onItemClick: (beer: Beer) -> Unit = {}
+    var onFavoriteClick: (beer: Beer) -> Unit = {}
 
     var beers: List<Beer> = emptyList()
         set(value) {
@@ -51,13 +53,22 @@ class BeersListAdapter : RecyclerView.Adapter<BeersListAdapter.ViewHolder>() {
                     onItemClick(beer)
                 }
             }
+
+            binding.favoriteIv.setOnSingleClickListener {
+                (itemView.tag as Beer?)?.let { beer ->
+                    onFavoriteClick(beer)
+                }
+            }
         }
 
         fun bind(beer: Beer) {
             itemView.tag = beer
 
             binding.nameTv.text = beer.name
-            binding.abvTv.text = beer.abv.toString() // FIXME
+            binding.abvTv.text = binding.abvTv.resources.getString(R.string.format_beer_list_abc, beer.abv)
+
+            val favoriteResId = if (beer.isFavorite) R.drawable.ic_favorite_filled else R.drawable.ic_favorite_outline
+            binding.favoriteIv.setImageResource(favoriteResId)
         }
     }
 }

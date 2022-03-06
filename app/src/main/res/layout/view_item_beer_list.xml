@@ -47,9 +47,11 @@
         android:id="@+id/divider"
         android:layout_width="match_parent"
         android:layout_height="1dp"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp"
         android:background="#1e000000"
-        android:layout_marginTop="4dp"
-        android:layout_marginStart="16dp"
         app:layout_constraintTop_toBottomOf="@id/abvTv"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

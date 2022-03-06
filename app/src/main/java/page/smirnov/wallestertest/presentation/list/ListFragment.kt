@@ -30,6 +30,7 @@ class ListFragment : BaseFragment<FragmentListBinding>(FragmentListBinding::infl
 
     private fun setupRecyclerView() {
         beersAdapter.onItemClick = viewModel::onBeerClick
+        beersAdapter.onFavoriteClick = viewModel::toggleFavorite
 
         binding?.beersRv?.apply {
             val linearLayoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
