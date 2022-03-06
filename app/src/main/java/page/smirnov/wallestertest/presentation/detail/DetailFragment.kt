@@ -6,6 +6,7 @@ import androidx.lifecycle.Lifecycle
 import kotlinx.coroutines.launch
 import page.smirnov.wallester.core_network.data.model.Beer
 import page.smirnov.wallester.core_ui.presentation.BaseFragment
+import page.smirnov.wallester.core_ui.util.setOnSingleClickListener
 import page.smirnov.wallestertest.R
 import page.smirnov.wallestertest.databinding.FragmentDetailBinding
 
@@ -13,6 +14,14 @@ class DetailFragment : BaseFragment<FragmentDetailBinding>(FragmentDetailBinding
 
     override val screenName: String = SCREEN_NAME
     override val viewModel: DetailViewModel by viewModels()
+
+    override fun setupView() {
+        super.setupView()
+
+        binding?.favoriteIv?.setOnSingleClickListener {
+            viewModel.toggleFavorite()
+        }
+    }
 
     override fun setupViewModel() {
         super.setupViewModel()
@@ -34,6 +43,9 @@ class DetailFragment : BaseFragment<FragmentDetailBinding>(FragmentDetailBinding
             alcoholTv.text = getString(R.string.format_abv, beer.abv)
             ebcTv.text = getString(R.string.format_ebc, beer.ebc)
             ibuTv.text = getString(R.string.format_ibu, beer.ibu)
+
+            val favoriteResId = if (beer.isFavorite) R.drawable.ic_favorite_filled else R.drawable.ic_favorite_outline
+            favoriteIv.setImageResource(favoriteResId)
         }
 
         updateToolbar {

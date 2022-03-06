@@ -1,14 +1,39 @@
 package page.smirnov.wallester.core_persistence.data.repository
 
+import android.content.Context
 import android.database.Cursor
 import androidx.core.content.contentValuesOf
 import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import page.smirnov.wallester.core.util.withContextCatching
 import page.smirnov.wallester.core_persistence.data.db.FavoritesContract
 import page.smirnov.wallester.core_persistence.data.db.FavoritesDbHelper
 import page.smirnov.wallester.core_persistence.data.model.FavoriteBeer
+
+/**
+ * This is something like an DI Singleton implementation
+ * Normally we should use @Singleton from Dagger/Hilt, but we can't use it
+ * This repository should exist only in a single instance, as it has a changes flow
+ */
+object FavoritesRepositoryHolder {
+
+    lateinit var favoritesRepository: FavoritesRepository
+        private set
+
+    fun initialize(context: Context) {
+        if (::favoritesRepository.isInitialized) {
+            throw IllegalStateException("Already initialized")
+        }
+
+        val dbHelper = FavoritesDbHelper(context)
+        favoritesRepository = FavoritesRepositoryImpl(
+            favoritesDbHelper = dbHelper,
+            dispatcher = Dispatchers.IO.limitedParallelism(1) // Limit because SQLite doesn't support multithreading
+        )
+    }
+}
 
 interface FavoritesRepository {
     val changesFlow: Flow<Unit> // Fires when favorites are changed

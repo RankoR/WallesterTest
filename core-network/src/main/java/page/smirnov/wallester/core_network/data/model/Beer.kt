@@ -13,5 +13,6 @@ data class Beer(
     val name: String,
     val abv: Float,
     val ebc: Float,
-    val ibu: Float
+    val ibu: Float,
+    val isFavorite: Boolean = false // Normally we should wrap it in a separate model like BeerDisplayModel(beer: Beer, isFavorite: Boolean), but I have no time for it
 ) : Parcelable
