@@ -54,7 +54,7 @@ abstract class BaseFragment<VB : ViewBinding>(
     }
 
     protected fun launchRepeatingOn(state: Lifecycle.State, block: suspend CoroutineScope.() -> Unit) {
-        lifecycleScope.launch {
+        viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(state, block)
         }
     }

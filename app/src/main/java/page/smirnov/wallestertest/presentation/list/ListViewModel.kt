@@ -6,7 +6,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.lastOrNull
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
 import page.smirnov.wallester.core.util.extension.onFailureLog
 import page.smirnov.wallester.core_network.data.model.Beer
@@ -35,6 +35,9 @@ class ListViewModel : BaseViewModel() {
     private val _beerList = MutableStateFlow<List<Beer>>(emptyList())
     val beerList: Flow<List<Beer>> = _beerList
 
+    private val _openBeerScreen = MutableSharedFlow<Beer>()
+    val openBeerScreen = _openBeerScreen.asSharedFlow() // Normally this would be handled by some nav library like Cicerone
+
     private var beers: List<Beer> = emptyList() // Can be solved more gracefully with a pagination library
 
     private var currentPage = 0 // Normally we should use a pagination library, but it's an overkill for such project
@@ -60,13 +63,9 @@ class ListViewModel : BaseViewModel() {
 
     internal fun onBeerClick(beer: Beer) {
         Log.i("WTEST", "Beer: $beer")
-    }
 
-    private suspend fun <T> MutableSharedFlow<List<T>>.addAll(list: List<T>) {
-        val lastList = lastOrNull()?.toMutableList() ?: mutableListOf()
-
-        lastList.addAll(list)
-
-        emit(lastList)
+        viewModelScope.launch {
+            _openBeerScreen.emit(beer)
+        }
     }
 }

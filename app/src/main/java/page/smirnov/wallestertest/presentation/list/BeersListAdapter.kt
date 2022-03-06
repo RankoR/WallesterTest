@@ -5,6 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import page.smirnov.wallester.core_network.data.model.Beer
+import page.smirnov.wallester.core_ui.util.setOnSingleClickListener
 import page.smirnov.wallestertest.databinding.ViewItemBeerListBinding
 
 class BeersListAdapter : RecyclerView.Adapter<BeersListAdapter.ViewHolder>() {
@@ -45,7 +46,7 @@ class BeersListAdapter : RecyclerView.Adapter<BeersListAdapter.ViewHolder>() {
     ) : RecyclerView.ViewHolder(binding.root) {
 
         init {
-            itemView.setOnClickListener {
+            itemView.setOnSingleClickListener {
                 (itemView.tag as Beer?)?.let { beer ->
                     onItemClick(beer)
                 }
