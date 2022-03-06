@@ -44,6 +44,14 @@ class ListFragment : BaseFragment<FragmentListBinding>(FragmentListBinding::infl
         super.onViewCreated(view, savedInstanceState)
     }
 
+    override fun onStart() {
+        super.onStart()
+
+        updateToolbar {
+            title = getString(R.string.title_screen_list)
+        }
+    }
+
     override fun setupViewModel() {
         super.setupViewModel()
 

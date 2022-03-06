@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.appcompat.widget.Toolbar
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
@@ -14,6 +15,7 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.viewbinding.ViewBinding
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
+import page.smirnov.wallester.core_ui.R
 
 abstract class BaseFragment<VB : ViewBinding>(
     private val inflate: Inflate<VB>
@@ -56,6 +58,12 @@ abstract class BaseFragment<VB : ViewBinding>(
     protected fun launchRepeatingOn(state: Lifecycle.State, block: suspend CoroutineScope.() -> Unit) {
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(state, block)
+        }
+    }
+
+    protected fun updateToolbar(block: Toolbar.() -> Unit) {
+        activity?.findViewById<Toolbar>(R.id.toolbar)?.apply {
+            block()
         }
     }
 

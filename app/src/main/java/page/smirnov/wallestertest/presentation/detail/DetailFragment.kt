@@ -35,6 +35,10 @@ class DetailFragment : BaseFragment<FragmentDetailBinding>(FragmentDetailBinding
             ebcTv.text = getString(R.string.format_ebc, beer.ebc)
             ibuTv.text = getString(R.string.format_ibu, beer.ibu)
         }
+
+        updateToolbar {
+            title = beer.name
+        }
     }
 
     companion object {
