@@ -3,11 +3,10 @@ package page.smirnov.wallestertest.presentation.detail
 import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
 import kotlinx.coroutines.launch
 import page.smirnov.wallester.core_network.data.model.Beer
 import page.smirnov.wallester.core_ui.presentation.BaseFragment
+import page.smirnov.wallestertest.R
 import page.smirnov.wallestertest.databinding.FragmentDetailBinding
 
 class DetailFragment : BaseFragment<FragmentDetailBinding>(FragmentDetailBinding::inflate) {
@@ -15,17 +14,11 @@ class DetailFragment : BaseFragment<FragmentDetailBinding>(FragmentDetailBinding
     override val screenName: String = SCREEN_NAME
     override val viewModel: DetailViewModel by viewModels()
 
-    override fun setupView() {
-        super.setupView()
-    }
-
     override fun setupViewModel() {
         super.setupViewModel()
 
-        lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
-                launch { viewModel.beer.collect(::showBeer) }
-            }
+        launchRepeatingOn(Lifecycle.State.STARTED) {
+            launch { viewModel.beer.collect(::showBeer) }
         }
 
         initializeBeer()
@@ -38,6 +31,9 @@ class DetailFragment : BaseFragment<FragmentDetailBinding>(FragmentDetailBinding
     private fun showBeer(beer: Beer) {
         binding?.apply {
             nameTv.text = beer.name
+            alcoholTv.text = getString(R.string.format_abv, beer.abv)
+            ebcTv.text = getString(R.string.format_ebc, beer.ebc)
+            ibuTv.text = getString(R.string.format_ibu, beer.ibu)
         }
     }
 

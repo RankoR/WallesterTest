@@ -8,4 +8,8 @@
     <string name="title_beer_alcohol">Alcohol:</string>
     <string name="title_beer_ebc">EBC:</string>
     <string name="title_beer_ibu">IBU:</string>
+
+    <string name="format_abv">%1$.1f°</string>
+    <string name="format_ebc">%1$.1f</string>
+    <string name="format_ibu">%1$.1f</string>
 </resources>
