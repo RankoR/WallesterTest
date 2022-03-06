@@ -53,6 +53,8 @@ class BeersListAdapter : RecyclerView.Adapter<BeersListAdapter.ViewHolder>() {
         }
 
         fun bind(beer: Beer) {
+            itemView.tag = beer
+
             binding.nameTv.text = beer.name
             binding.abvTv.text = beer.abv.toString() // FIXME
         }

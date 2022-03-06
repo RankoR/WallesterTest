@@ -1,5 +1,6 @@
 package page.smirnov.wallestertest.presentation.list
 
+import android.util.Log
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
@@ -58,7 +59,7 @@ class ListViewModel : BaseViewModel() {
     }
 
     internal fun onBeerClick(beer: Beer) {
-        // TODO
+        Log.i("WTEST", "Beer: $beer")
     }
 
     private suspend fun <T> MutableSharedFlow<List<T>>.addAll(list: List<T>) {
