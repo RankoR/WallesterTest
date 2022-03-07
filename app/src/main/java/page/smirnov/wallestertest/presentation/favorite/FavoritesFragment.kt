@@ -1,6 +1,7 @@
 package page.smirnov.wallestertest.presentation.favorite
 
 import android.util.Log
+import android.view.View
 import androidx.fragment.app.commit
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
@@ -18,6 +19,8 @@ class FavoritesFragment : BaseFragment<FragmentFavoritesBinding>(FragmentFavorit
     override val screenName: String = SCREEN_NAME
 
     override val viewModel: FavoritesViewModel by viewModels()
+
+    override val loaderView: View? by lazy { binding?.progressBar }
 
     private val favoritesAdapter = FavoritesAdapter()
 

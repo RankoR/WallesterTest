@@ -75,6 +75,8 @@ class ListViewModel : BaseViewModel() {
     private var isLoading = false
 
     init {
+        setIsLoading(true)
+
         loadNextPage()
         listenForFavoriteChanges()
     }
@@ -108,7 +110,10 @@ class ListViewModel : BaseViewModel() {
                     // Future improvement: update only for new items
                     updateFavoritesState()
                 }
-                .onFinish { isLoading = false }
+                .onFinish {
+                    isLoading = false
+                    setIsLoading(false)
+                }
         }
     }
 

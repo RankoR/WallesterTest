@@ -1,6 +1,7 @@
 package page.smirnov.wallestertest.presentation.list
 
 import android.util.Log
+import android.view.View
 import androidx.fragment.app.commit
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
@@ -21,6 +22,8 @@ class ListFragment : BaseFragment<FragmentListBinding>(FragmentListBinding::infl
     override val viewModel: ListViewModel by viewModels()
 
     private val beersAdapter = BeersListAdapter()
+
+    override val loaderView: View? by lazy { binding?.progressBar }
 
     override fun setupView() {
         super.setupView()

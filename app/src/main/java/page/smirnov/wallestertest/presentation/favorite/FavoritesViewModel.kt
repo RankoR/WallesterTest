@@ -8,6 +8,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
 import page.smirnov.wallester.core.util.extension.onFailureLog
+import page.smirnov.wallester.core.util.extension.onFinish
 import page.smirnov.wallester.core_persistence.data.model.Beer
 import page.smirnov.wallester.core_persistence.data.repository.FavoritesRepositoryHolder
 import page.smirnov.wallester.core_persistence.domain.interactor.GetFavorites
@@ -41,6 +42,8 @@ class FavoritesViewModel : BaseViewModel() {
 
     private fun loadFavorites() {
         viewModelScope.launch {
+            setIsLoading(true)
+
             getFavorites
                 .exec()
                 .onFailureLog()
@@ -49,6 +52,7 @@ class FavoritesViewModel : BaseViewModel() {
 
                     _beerList.emit(beers)
                 }
+                .onFinish { setIsLoading(false) }
         }
     }
 

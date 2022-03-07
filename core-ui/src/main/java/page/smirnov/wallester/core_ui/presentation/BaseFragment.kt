@@ -98,13 +98,13 @@ abstract class BaseFragment<VB : ViewBinding>(
     }
 
     protected open fun showLoading(isLoading: Boolean) {
-        Log.v("TEST", "Is loading: $isLoading")
+        Log.v("WTEST", "Is loading: $isLoading")
 
-        loaderView?.isVisible = true
+        loaderView?.isVisible = isLoading
     }
 
     protected open fun showErrorMessage(message: String) {
-        Log.v("TEST", "Show error")
+        Log.v("WTEST", "Show error")
 
         showToast(message) // TODO
 
