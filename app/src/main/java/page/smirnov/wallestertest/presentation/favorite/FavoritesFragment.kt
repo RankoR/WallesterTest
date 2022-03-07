@@ -2,6 +2,9 @@ package page.smirnov.wallestertest.presentation.favorite
 
 import android.util.Log
 import android.view.View
+import android.widget.AdapterView
+import android.widget.AdapterView.OnItemSelectedListener
+import android.widget.ArrayAdapter
 import androidx.fragment.app.commit
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
@@ -11,6 +14,7 @@ import kotlinx.coroutines.launch
 import page.smirnov.wallester.core_persistence.data.model.Beer
 import page.smirnov.wallester.core_ui.presentation.BaseFragment
 import page.smirnov.wallestertest.R
+import page.smirnov.wallestertest.data.model.SortingMode
 import page.smirnov.wallestertest.databinding.FragmentFavoritesBinding
 import page.smirnov.wallestertest.presentation.detail.DetailFragment
 
@@ -36,6 +40,7 @@ class FavoritesFragment : BaseFragment<FragmentFavoritesBinding>(FragmentFavorit
         super.setupView()
 
         setupRecyclerView()
+        setupSpinner()
     }
 
     private fun setupRecyclerView() {
@@ -44,6 +49,35 @@ class FavoritesFragment : BaseFragment<FragmentFavoritesBinding>(FragmentFavorit
         binding?.beersRv?.apply {
             layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
             adapter = favoritesAdapter
+        }
+    }
+
+    private fun setupSpinner() {
+        binding?.sortingSpinner?.onItemSelectedListener = object : OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                val sortingMode = when (position) {
+                    0 -> SortingMode.NAME
+                    1 -> SortingMode.ABV
+                    2 -> SortingMode.EBC
+                    3 -> SortingMode.IBU
+                    else -> throw IllegalArgumentException("Unknown position = $position")
+                }
+
+                viewModel.sortingMode = sortingMode
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+            }
+        }
+
+        ArrayAdapter.createFromResource(
+            context ?: return,
+            R.array.favorites_sorting_modes,
+            android.R.layout.simple_spinner_item
+        ).apply {
+            setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        }.let { adapter ->
+            binding?.sortingSpinner?.adapter = adapter
         }
     }
 

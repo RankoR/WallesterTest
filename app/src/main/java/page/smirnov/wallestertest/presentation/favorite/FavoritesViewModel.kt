@@ -16,6 +16,9 @@ import page.smirnov.wallester.core_persistence.domain.interactor.GetFavoritesImp
 import page.smirnov.wallester.core_persistence.domain.interactor.ListenFavoritesChanges
 import page.smirnov.wallester.core_persistence.domain.interactor.ListenFavoritesChangesImpl
 import page.smirnov.wallester.core_ui.presentation.BaseViewModel
+import page.smirnov.wallestertest.data.model.SortingMode
+import page.smirnov.wallestertest.domain.interactor.SortBeers
+import page.smirnov.wallestertest.domain.interactor.SortBeersImpl
 
 class FavoritesViewModel : BaseViewModel() {
 
@@ -28,6 +31,20 @@ class FavoritesViewModel : BaseViewModel() {
     private val getFavorites: GetFavorites = GetFavoritesImpl(
         favoritesRepository = FavoritesRepositoryHolder.favoritesRepository
     )
+
+    // DI
+    private val sortBeers: SortBeers = SortBeersImpl()
+
+    var sortingMode: SortingMode = SortingMode.NAME
+        set(value) {
+            if (value != field) {
+                field = value
+                applySorting()
+                emitBeers()
+            }
+        }
+
+    private var beers: List<Beer> = emptyList()
 
     private val _beerList = MutableStateFlow<List<Beer>>(emptyList())
     val beerList: Flow<List<Beer>> = _beerList
@@ -51,7 +68,10 @@ class FavoritesViewModel : BaseViewModel() {
                 .onSuccess { beers ->
                     Log.i("WTEST", "Loaded ${beers.size} favorite beers")
 
-                    _beerList.emit(beers)
+                    this@FavoritesViewModel.beers = beers
+
+                    applySorting()
+                    emitBeers()
                 }
                 .onFinish { setIsLoading(false) }
         }
@@ -64,6 +84,18 @@ class FavoritesViewModel : BaseViewModel() {
 
                 loadFavorites()
             }
+        }
+    }
+
+    private fun applySorting() {
+        Log.i("WTEST", "Sorting mode: $sortingMode")
+
+        beers = sortBeers.exec(beers, sortingMode)
+    }
+
+    private fun emitBeers() {
+        viewModelScope.launch {
+            _beerList.emit(beers)
         }
     }
 
