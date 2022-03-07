@@ -101,7 +101,7 @@ class ListViewModel : BaseViewModel() {
             getBeerList
                 .exec(currentPage)
                 .onFailureLog()
-                .onFailure(::showErrorMessage)
+                .onFailure(::showErrorMessage) // Here we should set the error state, not only display the message
                 .onSuccess { beersOnPage ->
                     Log.i("WTEST", "Loaded ${beersOnPage.size} beers")
 

@@ -47,6 +47,7 @@ class FavoritesViewModel : BaseViewModel() {
             getFavorites
                 .exec()
                 .onFailureLog()
+                .onFailure(::showErrorMessage)
                 .onSuccess { beers ->
                     Log.i("WTEST", "Loaded ${beers.size} favorite beers")
 
