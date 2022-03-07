@@ -1,9 +1,9 @@
 package page.smirnov.wallester.core_network.data.parser.beer
 
 import org.json.JSONArray
-import page.smirnov.wallester.core_network.data.model.Beer
 import page.smirnov.wallester.core_network.data.parser.base.ResponseParser
 import page.smirnov.wallester.core_network.util.toJSONObjectSequence
+import page.smirnov.wallester.core_persistence.data.model.Beer
 
 /**
  * Should be in a separate feature module like «:beers», but it's too complicated for a test project

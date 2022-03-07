@@ -10,7 +10,7 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import page.smirnov.wallester.core.util.withContextCatching
 import page.smirnov.wallester.core_persistence.data.db.FavoritesContract
 import page.smirnov.wallester.core_persistence.data.db.FavoritesDbHelper
-import page.smirnov.wallester.core_persistence.data.model.FavoriteBeer
+import page.smirnov.wallester.core_persistence.data.model.Beer
 
 /**
  * This is something like an DI Singleton implementation
@@ -38,10 +38,10 @@ object FavoritesRepositoryHolder {
 interface FavoritesRepository {
     val changesFlow: Flow<Unit> // Fires when favorites are changed
 
-    suspend fun getFavoriteBeers(): Result<List<FavoriteBeer>>
-    suspend fun isFavorite(favoriteBeer: FavoriteBeer): Result<Boolean>
-    suspend fun addFavoriteBeer(favoriteBeer: FavoriteBeer): Result<Unit>
-    suspend fun removeFavoriteBeer(favoriteBeer: FavoriteBeer): Result<Unit>
+    suspend fun getFavoriteBeers(): Result<List<Beer>>
+    suspend fun isFavorite(beer: Beer): Result<Boolean>
+    suspend fun addFavoriteBeer(beer: Beer): Result<Unit>
+    suspend fun removeFavoriteBeer(beer: Beer): Result<Unit>
 }
 
 class FavoritesRepositoryImpl(
@@ -51,7 +51,7 @@ class FavoritesRepositoryImpl(
 
     override val changesFlow: MutableSharedFlow<Unit> = MutableSharedFlow(replay = 1)
 
-    override suspend fun getFavoriteBeers(): Result<List<FavoriteBeer>> {
+    override suspend fun getFavoriteBeers(): Result<List<Beer>> {
         return withContextCatching(dispatcher) {
             favoritesDbHelper.readableDatabase.use { db ->
                 db.query(
@@ -64,8 +64,13 @@ class FavoritesRepositoryImpl(
                     null
                 ).use { cursor ->
                     cursor.toList {
-                        FavoriteBeer(
-                            id = getLong(getColumnIndexOrThrow(FavoritesContract.FavoriteBeer.COLUMN_NAME_BEER_ID))
+                        Beer(
+                            id = getLong(getColumnIndexOrThrow(FavoritesContract.FavoriteBeer.COLUMN_NAME_BEER_ID)),
+                            name = getString(getColumnIndexOrThrow(FavoritesContract.FavoriteBeer.COLUMN_NAME_BEER_NAME)),
+                            abv = getFloat(getColumnIndexOrThrow(FavoritesContract.FavoriteBeer.COLUMN_NAME_ABV)),
+                            ebc = getFloat(getColumnIndexOrThrow(FavoritesContract.FavoriteBeer.COLUMN_NAME_EBC)),
+                            ibu = getFloat(getColumnIndexOrThrow(FavoritesContract.FavoriteBeer.COLUMN_NAME_IBU)),
+                            isFavorite = true
                         )
                     }
                 }
@@ -73,11 +78,11 @@ class FavoritesRepositoryImpl(
         }
     }
 
-    override suspend fun isFavorite(favoriteBeer: FavoriteBeer): Result<Boolean> {
+    override suspend fun isFavorite(beer: Beer): Result<Boolean> {
         return withContextCatching(dispatcher) {
             favoritesDbHelper.readableDatabase.use { db ->
                 db.rawQuery(
-                    String.format(FavoritesContract.FavoriteBeer.EXISTS_STATEMENT_FORMAT, favoriteBeer.id),
+                    String.format(FavoritesContract.FavoriteBeer.EXISTS_STATEMENT_FORMAT, beer.id),
                     null
                 ).use { cursor ->
                     if (cursor.moveToFirst()) {
@@ -90,11 +95,15 @@ class FavoritesRepositoryImpl(
         }
     }
 
-    override suspend fun addFavoriteBeer(favoriteBeer: FavoriteBeer): Result<Unit> {
+    override suspend fun addFavoriteBeer(beer: Beer): Result<Unit> {
         return withContextCatching(dispatcher) {
             favoritesDbHelper.writableDatabase.use { db ->
                 val contentValues = contentValuesOf(
-                    FavoritesContract.FavoriteBeer.COLUMN_NAME_BEER_ID to favoriteBeer.id
+                    FavoritesContract.FavoriteBeer.COLUMN_NAME_BEER_ID to beer.id,
+                    FavoritesContract.FavoriteBeer.COLUMN_NAME_BEER_NAME to beer.name,
+                    FavoritesContract.FavoriteBeer.COLUMN_NAME_ABV to beer.abv,
+                    FavoritesContract.FavoriteBeer.COLUMN_NAME_IBU to beer.ibu,
+                    FavoritesContract.FavoriteBeer.COLUMN_NAME_EBC to beer.ebc,
                 )
 
                 db.insert(FavoritesContract.FavoriteBeer.TABLE_NAME, null, contentValues)
@@ -104,13 +113,13 @@ class FavoritesRepositoryImpl(
         }
     }
 
-    override suspend fun removeFavoriteBeer(favoriteBeer: FavoriteBeer): Result<Unit> {
+    override suspend fun removeFavoriteBeer(beer: Beer): Result<Unit> {
         return withContextCatching(dispatcher) {
             favoritesDbHelper.writableDatabase.use { db ->
                 db.delete(
                     FavoritesContract.FavoriteBeer.TABLE_NAME,
                     "${FavoritesContract.FavoriteBeer.COLUMN_NAME_BEER_ID} = ?",
-                    arrayOf(favoriteBeer.id.toString())
+                    arrayOf(beer.id.toString())
                 )
             }
 

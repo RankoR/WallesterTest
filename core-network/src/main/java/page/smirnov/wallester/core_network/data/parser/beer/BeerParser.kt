@@ -1,8 +1,8 @@
 package page.smirnov.wallester.core_network.data.parser.beer
 
 import org.json.JSONObject
-import page.smirnov.wallester.core_network.data.model.Beer
 import page.smirnov.wallester.core_network.data.parser.base.JsonObjectParser
+import page.smirnov.wallester.core_persistence.data.model.Beer
 
 /**
  * Normally I'd use KotlinX serialization, but we can't use libs

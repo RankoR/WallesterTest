@@ -2,10 +2,10 @@ package page.smirnov.wallester.core_network.parser
 
 import org.junit.Assert
 import org.junit.Test
-import page.smirnov.wallester.core_network.data.model.Beer
 import page.smirnov.wallester.core_network.data.parser.beer.BeerListParser
 import page.smirnov.wallester.core_network.data.parser.beer.BeerListParserImpl
 import page.smirnov.wallester.core_network.data.parser.beer.BeerParserImpl
+import page.smirnov.wallester.core_persistence.data.model.Beer
 
 class BeerListParserTest {
 

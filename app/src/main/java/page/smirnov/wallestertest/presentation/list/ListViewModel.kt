@@ -10,13 +10,12 @@ import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
 import page.smirnov.wallester.core.util.extension.onFailureLog
 import page.smirnov.wallester.core.util.extension.onFinish
-import page.smirnov.wallester.core_network.data.model.Beer
 import page.smirnov.wallester.core_network.data.parser.beer.BeerListParserImpl
 import page.smirnov.wallester.core_network.domain.BuildUrlImpl
 import page.smirnov.wallester.core_network.domain.MakeGetRequestImpl
 import page.smirnov.wallester.core_network.domain.beer.GetBeerList
 import page.smirnov.wallester.core_network.domain.beer.GetBeerListImpl
-import page.smirnov.wallester.core_persistence.data.model.FavoriteBeer
+import page.smirnov.wallester.core_persistence.data.model.Beer
 import page.smirnov.wallester.core_persistence.data.repository.FavoritesRepositoryHolder
 import page.smirnov.wallester.core_persistence.domain.interactor.AddFavorite
 import page.smirnov.wallester.core_persistence.domain.interactor.AddFavoriteImpl
@@ -145,9 +144,9 @@ class ListViewModel : BaseViewModel() {
     internal fun toggleFavorite(beer: Beer) {
         viewModelScope.launch {
             if (beer.isFavorite) {
-                removeFavorite.exec(FavoriteBeer(id = beer.id))
+                removeFavorite.exec(beer)
             } else {
-                addFavorite.exec(FavoriteBeer(id = beer.id))
+                addFavorite.exec(beer)
             }
         }
     }

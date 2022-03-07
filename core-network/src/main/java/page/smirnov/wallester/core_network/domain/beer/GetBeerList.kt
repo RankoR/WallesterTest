@@ -1,9 +1,9 @@
 package page.smirnov.wallester.core_network.domain.beer
 
 import page.smirnov.wallester.core.util.extension.flatMap
-import page.smirnov.wallester.core_network.data.model.Beer
 import page.smirnov.wallester.core_network.data.parser.beer.BeerListParser
 import page.smirnov.wallester.core_network.domain.MakeGetRequest
+import page.smirnov.wallester.core_persistence.data.model.Beer
 
 interface GetBeerList {
     suspend fun exec(page: Int): Result<List<Beer>>

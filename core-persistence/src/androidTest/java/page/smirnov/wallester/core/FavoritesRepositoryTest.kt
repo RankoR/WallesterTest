@@ -10,9 +10,10 @@ import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
 import page.smirnov.wallester.core_persistence.data.db.FavoritesDbHelper
-import page.smirnov.wallester.core_persistence.data.model.FavoriteBeer
+import page.smirnov.wallester.core_persistence.data.model.Beer
 import page.smirnov.wallester.core_persistence.data.repository.FavoritesRepository
 import page.smirnov.wallester.core_persistence.data.repository.FavoritesRepositoryImpl
+import kotlin.random.Random
 
 class FavoritesRepositoryTest {
 
@@ -29,7 +30,18 @@ class FavoritesRepositoryTest {
     @Test
     fun addFavoriteBeer() {
         runTest {
-            val favoriteBeers = (0..99).map { FavoriteBeer(id = it.toLong()) }.toList()
+            val favoriteBeers = (0..99)
+                .map {
+                    Beer(
+                        id = it.toLong(),
+                        name = "Beer #$it",
+                        abv = Random.nextFloat(),
+                        ebc = Random.nextFloat(),
+                        ibu = Random.nextFloat(),
+                        isFavorite = true
+                    )
+                }
+                .toList()
 
             favoriteBeers.forEach {
                 val addResult = repository.addFavoriteBeer(it)
@@ -50,7 +62,18 @@ class FavoritesRepositoryTest {
     @Test
     fun removeFavoriteBeer() {
         runTest {
-            val favoriteBeers = (0..99).map { FavoriteBeer(id = it.toLong()) }.toList()
+            val favoriteBeers = (0..99)
+                .map {
+                    Beer(
+                        id = it.toLong(),
+                        name = "Beer #$it",
+                        abv = Random.nextFloat(),
+                        ebc = Random.nextFloat(),
+                        ibu = Random.nextFloat(),
+                        isFavorite = true
+                    )
+                }
+                .toList()
 
             favoriteBeers.forEach {
                 val addResult = repository.addFavoriteBeer(it)
@@ -80,8 +103,22 @@ class FavoritesRepositoryTest {
     @Test
     fun isFavorite() {
         runTest {
-            val favoriteBeer = FavoriteBeer(id = 100500)
-            val notFavoriteBeer = FavoriteBeer(id = 31337)
+            val favoriteBeer = Beer(
+                id = 100500,
+                name = "Beer #100500",
+                abv = Random.nextFloat(),
+                ebc = Random.nextFloat(),
+                ibu = Random.nextFloat(),
+                isFavorite = true
+            )
+            val notFavoriteBeer = Beer(
+                id = 31337,
+                name = "Beer #31337",
+                abv = Random.nextFloat(),
+                ebc = Random.nextFloat(),
+                ibu = Random.nextFloat(),
+                isFavorite = true
+            )
 
             val addResult = repository.addFavoriteBeer(favoriteBeer)
             Assert.assertTrue(addResult.isSuccess)

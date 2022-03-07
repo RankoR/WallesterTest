@@ -1,7 +1,7 @@
-package page.smirnov.wallestertest.presentation.list
+package page.smirnov.wallestertest.presentation.util
 
 import androidx.recyclerview.widget.DiffUtil
-import page.smirnov.wallester.core_network.data.model.Beer
+import page.smirnov.wallester.core_persistence.data.model.Beer
 
 internal class BeersListDiffUtilCallback(
     private val oldList: List<Beer>,

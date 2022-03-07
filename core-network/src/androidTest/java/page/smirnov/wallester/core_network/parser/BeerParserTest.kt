@@ -4,9 +4,9 @@ import org.json.JSONException
 import org.json.JSONObject
 import org.junit.Assert
 import org.junit.Test
-import page.smirnov.wallester.core_network.data.model.Beer
 import page.smirnov.wallester.core_network.data.parser.beer.BeerParser
 import page.smirnov.wallester.core_network.data.parser.beer.BeerParserImpl
+import page.smirnov.wallester.core_persistence.data.model.Beer
 
 class BeerParserTest {
 

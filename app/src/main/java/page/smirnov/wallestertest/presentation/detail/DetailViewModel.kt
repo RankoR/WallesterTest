@@ -6,8 +6,7 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
 import page.smirnov.wallester.core.util.extension.onFailureLog
-import page.smirnov.wallester.core_network.data.model.Beer
-import page.smirnov.wallester.core_persistence.data.model.FavoriteBeer
+import page.smirnov.wallester.core_persistence.data.model.Beer
 import page.smirnov.wallester.core_persistence.data.repository.FavoritesRepositoryHolder
 import page.smirnov.wallester.core_persistence.domain.interactor.AddFavorite
 import page.smirnov.wallester.core_persistence.domain.interactor.AddFavoriteImpl
@@ -62,7 +61,7 @@ class DetailViewModel : BaseViewModel() {
         viewModelScope.launch {
             internalBeer?.let { beer ->
                 isFavorite
-                    .exec(FavoriteBeer(id = beer.id))
+                    .exec(beer)
                     .onFailureLog()
                     .onSuccess { isFavorite ->
                         if (beer.isFavorite != isFavorite) {
@@ -87,9 +86,9 @@ class DetailViewModel : BaseViewModel() {
         viewModelScope.launch {
             internalBeer?.let { beer ->
                 if (beer.isFavorite) {
-                    removeFavorite.exec(FavoriteBeer(id = beer.id))
+                    removeFavorite.exec(beer)
                 } else {
-                    addFavorite.exec(FavoriteBeer(id = beer.id))
+                    addFavorite.exec(beer)
                 }
             }
         }

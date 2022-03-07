@@ -1,4 +1,4 @@
-package page.smirnov.wallestertest.presentation.list
+package page.smirnov.wallestertest.presentation.favorite
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -6,14 +6,12 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import page.smirnov.wallester.core_persistence.data.model.Beer
 import page.smirnov.wallester.core_ui.util.setOnSingleClickListener
-import page.smirnov.wallestertest.R
-import page.smirnov.wallestertest.databinding.ViewItemBeerListBinding
+import page.smirnov.wallestertest.databinding.ViewItemFavoriteBinding
 import page.smirnov.wallestertest.presentation.util.BeersListDiffUtilCallback
 
-class BeersListAdapter : RecyclerView.Adapter<BeersListAdapter.ViewHolder>() {
+class FavoritesAdapter : RecyclerView.Adapter<FavoritesAdapter.ViewHolder>() {
 
     var onItemClick: (beer: Beer) -> Unit = {}
-    var onFavoriteClick: (beer: Beer) -> Unit = {}
 
     var beers: List<Beer> = emptyList()
         set(value) {
@@ -26,8 +24,8 @@ class BeersListAdapter : RecyclerView.Adapter<BeersListAdapter.ViewHolder>() {
             }
         }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        return ViewItemBeerListBinding
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FavoritesAdapter.ViewHolder {
+        return ViewItemFavoriteBinding
             .inflate(
                 LayoutInflater.from(parent.context),
                 parent,
@@ -36,7 +34,7 @@ class BeersListAdapter : RecyclerView.Adapter<BeersListAdapter.ViewHolder>() {
             .let(::ViewHolder)
     }
 
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: FavoritesAdapter.ViewHolder, position: Int) {
         holder.bind(beers[position])
     }
 
@@ -45,7 +43,7 @@ class BeersListAdapter : RecyclerView.Adapter<BeersListAdapter.ViewHolder>() {
     }
 
     inner class ViewHolder(
-        private val binding: ViewItemBeerListBinding
+        private val binding: ViewItemFavoriteBinding
     ) : RecyclerView.ViewHolder(binding.root) {
 
         init {
@@ -54,22 +52,12 @@ class BeersListAdapter : RecyclerView.Adapter<BeersListAdapter.ViewHolder>() {
                     onItemClick(beer)
                 }
             }
-
-            binding.favoriteIv.setOnSingleClickListener {
-                (itemView.tag as Beer?)?.let { beer ->
-                    onFavoriteClick(beer)
-                }
-            }
         }
 
         fun bind(beer: Beer) {
             itemView.tag = beer
 
             binding.nameTv.text = beer.name
-            binding.abvTv.text = binding.abvTv.resources.getString(R.string.format_beer_list_abc, beer.abv)
-
-            val favoriteResId = if (beer.isFavorite) R.drawable.ic_favorite_filled else R.drawable.ic_favorite_outline
-            binding.favoriteIv.setImageResource(favoriteResId)
         }
     }
 }

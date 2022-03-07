@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.OnScrollListener
 import kotlinx.coroutines.launch
-import page.smirnov.wallester.core_network.data.model.Beer
+import page.smirnov.wallester.core_persistence.data.model.Beer
 import page.smirnov.wallester.core_ui.presentation.BaseFragment
 import page.smirnov.wallestertest.R
 import page.smirnov.wallestertest.databinding.FragmentListBinding

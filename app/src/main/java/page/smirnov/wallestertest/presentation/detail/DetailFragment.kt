@@ -4,7 +4,7 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import kotlinx.coroutines.launch
-import page.smirnov.wallester.core_network.data.model.Beer
+import page.smirnov.wallester.core_persistence.data.model.Beer
 import page.smirnov.wallester.core_ui.presentation.BaseFragment
 import page.smirnov.wallester.core_ui.util.setOnSingleClickListener
 import page.smirnov.wallestertest.R

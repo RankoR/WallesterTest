@@ -1,4 +1,4 @@
-package page.smirnov.wallester.core_network.data.model
+package page.smirnov.wallester.core_persistence.data.model
 
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
