@@ -1,6 +1,6 @@
 # Test project
 
-![test-workflow](https://github.com/RankoR/WallesterTest/actions/workflows/main.yml/badge.svg)
+[![Android CI](https://github.com/RankoR/WallesterTest/actions/workflows/main.yml/badge.svg)](https://github.com/RankoR/WallesterTest/actions/workflows/main.yml)
 
 ## Notes on this project
 
@@ -11,7 +11,7 @@ I've tried to write code as production-ready as it's possible:
 - Splitting everything to interface/implementation for better testing and (in future) mocking
 - Splitting project to modules (see below)
 - Testing almost all business logic: see `tests` and `androidTests` in modules
-- Basic CI set up (CI runs JUnit and Instrumented tests, builds and publishes APK to releases)
+- Basic CI set up (CI runs JUnit and Instrumented tests, builds and publishes APK)
 
 However, there are lots of things we can improve (but it wasn't done due to time limitation):
 
