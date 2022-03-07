@@ -1,3 +1,28 @@
 <resources>
-    <string name="app_name">WallesterTest</string>
+    <string name="app_name">Wallester</string>
+
+    <string name="title_bottom_menu_list">All beers</string>
+    <string name="title_bottom_menu_favorites">Favorite</string>
+
+    <string name="title_screen_list">All beers</string>
+    <string name="title_screen_favorites">Favorite</string>
+
+    <string name="title_beer_name">Name:</string>
+    <string name="title_beer_alcohol">Alcohol:</string>
+    <string name="title_beer_ebc">EBC:</string>
+    <string name="title_beer_ibu">IBU:</string>
+
+    <string name="format_beer_list_abc">Vol: %1$.1f</string>
+
+    <string name="format_abv">%1$.1f°</string>
+    <string name="format_ebc">%1$.1f</string>
+    <string name="format_ibu">%1$.1f</string>
+
+    <!-- Sorting -->
+    <string-array name="favorites_sorting_modes">
+        <item>Name</item>
+        <item>Alcohol</item>
+        <item>EBC</item>
+        <item>IBU</item>
+    </string-array>
 </resources>

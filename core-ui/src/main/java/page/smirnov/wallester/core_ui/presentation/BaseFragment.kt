@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.appcompat.widget.Toolbar
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
@@ -14,6 +15,7 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.viewbinding.ViewBinding
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
+import page.smirnov.wallester.core_ui.R
 
 abstract class BaseFragment<VB : ViewBinding>(
     private val inflate: Inflate<VB>
@@ -54,8 +56,14 @@ abstract class BaseFragment<VB : ViewBinding>(
     }
 
     protected fun launchRepeatingOn(state: Lifecycle.State, block: suspend CoroutineScope.() -> Unit) {
-        lifecycleScope.launch {
+        viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(state, block)
+        }
+    }
+
+    protected fun updateToolbar(block: Toolbar.() -> Unit) {
+        activity?.findViewById<Toolbar>(R.id.toolbar)?.apply {
+            block()
         }
     }
 
@@ -90,13 +98,13 @@ abstract class BaseFragment<VB : ViewBinding>(
     }
 
     protected open fun showLoading(isLoading: Boolean) {
-        Log.v("TEST", "Is loading: $isLoading")
+        Log.v("WTEST", "Is loading: $isLoading")
 
-        loaderView?.isVisible = true
+        loaderView?.isVisible = isLoading
     }
 
     protected open fun showErrorMessage(message: String) {
-        Log.v("TEST", "Show error")
+        Log.v("WTEST", "Show error")
 
         showToast(message) // TODO
 

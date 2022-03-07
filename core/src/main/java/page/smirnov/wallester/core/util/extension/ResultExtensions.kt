@@ -69,7 +69,7 @@ suspend inline fun <T> Result<T>.onSuccessWithMainContext(crossinline block: (va
 inline fun <T> Result<T>.onFailureLog(): Result<T> {
     return this.onFailure { t ->
         // Here was a Timber call, but as we can't use libraries — here's a generic tag
-        Log.e("TEST", "onFailure", t)
+        Log.e("WTEST", "onFailure", t)
     }
 }
 
@@ -81,7 +81,7 @@ inline fun <T> Result<T>.onFailureLog(crossinline lazyMessage: (() -> Any)): Res
         val message = lazyMessage().toString()
 
         // Here was a Timber call, but as we can't use libraries — here's a generic tag
-        Log.e("TEST", message, t)
+        Log.e("WTEST", message, t)
     }
 }
 

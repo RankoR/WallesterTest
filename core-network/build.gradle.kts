@@ -8,6 +8,7 @@ plugins {
 
 dependencies {
     implementation(projects.core)
+    implementation(projects.corePersistence)
 
     // Tests
     addCoreTestLibraries()

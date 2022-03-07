@@ -27,8 +27,6 @@ fun DependencyHandlerScope.addCoreTestLibraries() {
     androidTestImplementation(Dependencies.Libraries.ANDROIDX_TEST_RUNNER)
     androidTestImplementation(Dependencies.Libraries.ANDROIDX_TEST_RULES)
     androidTestImplementation(Dependencies.Libraries.ANDROIDX_TEST_EXT_JUNIT)
-    testImplementation(Dependencies.Libraries.MOCKK)
-    testImplementation(Dependencies.Libraries.MOCKK_AGENT_JVM)
 
     testImplementation(Dependencies.Libraries.COROUTINES_TEST)
     androidTestImplementation(Dependencies.Libraries.COROUTINES_TEST)

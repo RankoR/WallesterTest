@@ -1,2 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest package="page.smirnov.wallester.core_network"/>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+          package="page.smirnov.wallester.core_network">
+
+    <uses-permission android:name="android.permission.INTERNET"/>
+</manifest>
